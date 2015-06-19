@@ -61,4 +61,8 @@ public class Account {
 	public void setBank(TheBank bank) {
 		this.bank = bank;
 	}
+	
+	public String toString(){
+		return "Balance EUR: " + this.balanceEuro + "Balance RON: " + this.balanceRON + " at bank " + this.bank.getName();
+	}
 }

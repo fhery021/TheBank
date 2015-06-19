@@ -1,11 +1,13 @@
 package bank.usecases;
 
+import java.util.List;
+
 import bank.pojo.Account;
 import bank.pojo.Client;
 import bank.pojo.TheBank;
 
 public interface BankUseCases {
-
+	
 	/**
 	 * 
 	 * @param bank
@@ -16,7 +18,9 @@ public interface BankUseCases {
 	 * The account you want to create
 	 * It creates a new account in the bank.
 	 */
-	public void createAccount(TheBank bank, Client client, Account account);
+	public Account createAccount(TheBank bank, Client client);
+	
+	public List getAllAccounts(TheBank bank);
 	
 	/**
 	 * 
@@ -35,6 +39,30 @@ public interface BankUseCases {
 	
 	//deounere 
 	public void deposit(TheBank bank, Client client, Account account, long sum);
+	
+	/**
+	 * 
+	 * @param bank 
+	 * The bank monitored
+	 * @param client
+	 * The Client who is monitored
+	 * @param account
+	 * The account monitored by Fist
+	 * Fisc attaches to the bank and receives notifications at every transaction.
+	 */
+	public void attachFiscMonitor(TheBank bank, Client client, Account account);
+	
+	public void notifyFisc();
+	
+	/**
+	 * 
+	 * @param bank
+	 * @param client
+	 * @param account
+	 * 
+	 * Fisc detaches from the Bank's notifications
+	 */
+	public void detachFiscMonitor(TheBank bank, Client client, Account account);
 	
 	
 }

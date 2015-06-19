@@ -4,20 +4,21 @@ import javax.persistence.EntityManager;
 
 import org.junit.Test;
 
+import utils.DbCleaner;
 import utils.JPAUtils;
 import bank.pojo.Account;
 import bank.pojo.Client;
 import bank.pojo.TheBank;
 
-public class PersistencyTests {
+public class CreateAnAccountTest {
 
 	EntityManager em;
 	
 	@Test
-	public void initBank() {
+	public void initBankAndCreateAnAccount() {
 		em = JPAUtils.getEntityManager();
 		
-		dropTablesFromDB();
+		DbCleaner.deleteTableContentFromDB(em);
 		
 		TheBank bank = new TheBank();
 		bank.setName("ING");
@@ -32,13 +33,8 @@ public class PersistencyTests {
 		em.persist(client);
 		em.persist(client1Account);
 		
+		
 		JPAUtils.close();
 	}
 
-	
-	private void dropTablesFromDB(){
-		em.createQuery("delete from Account").executeUpdate();
-		em.createQuery("delete from Client").executeUpdate();
-		em.createQuery("delete from TheBank").executeUpdate();
-	}
 }

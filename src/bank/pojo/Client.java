@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity(name = "Client")
 public class Client {
@@ -19,6 +18,7 @@ public class Client {
 	private Long id;
 	
 	private String CNP;
+	private String name;
 	
 	@ManyToOne(optional = false)
 	private TheBank bank;
@@ -41,7 +41,14 @@ public class Client {
 	public void setCNP(String cNP) {
 		CNP = cNP;
 	}
+	
+	public String getName() {
+		return name;
+	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public TheBank getBank() {
 		return bank;
@@ -56,5 +63,7 @@ public class Client {
 		return bank.getAccounts(this.id);
 	}
 
-	
+	public String toString(){
+		return "Name: "+this.name + " CNP: " + this.CNP + " Accounts: " + this.getAccounts().toString();
+	}
 }
