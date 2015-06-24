@@ -8,7 +8,6 @@
 		<class>bank.pojo.TheBank</class>
 		<class>bank.pojo.Fisc</class>
 		<class>bank.pojo.Client</class>
-		<class>bank.pojo.Account</class>
 		
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />

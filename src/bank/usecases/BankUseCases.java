@@ -1,8 +1,7 @@
 package bank.usecases;
 
-import java.util.List;
+import java.util.Collection;
 
-import bank.pojo.Account;
 import bank.pojo.Client;
 import bank.pojo.TheBank;
 
@@ -14,31 +13,41 @@ public interface BankUseCases {
 	 * The bank you choose
 	 * @param client
 	 * The client (CNP, name)
-	 * @param account
-	 * The account you want to create
 	 * It creates a new account in the bank.
+	 * @throws Exception 
 	 */
-	public Account createAccount(TheBank bank, Client client);
+	public Client createAccount(int clientId, int bankId) throws Exception;
+
+	public void deleteAccount(int bankId, int clientId) throws Exception;
 	
-	public List getAllAccounts(TheBank bank);
+	public Collection<Client> getAllClients(TheBank bank);
 	
-	/**
-	 * 
-	 * @param bank
-	 * @param client
-	 */
-	public Account getBalance(TheBank bank, Client client);
+	public int getBalanceEuro(int clientId);
+
+	public int getBalanceRON(int clientId);
 	
-	public void deleteAccount(TheBank bank, Client client, Account account);
+	public int getBalanceEuroDeposit(int clientId);
+	
+	public int getBalanceRONDeposit(int clientId);
 	
 	// depozitare pe termen lung
-	public void store(TheBank bank, Client client, Account account, long sum);
+	public void storeEuro(int clientId, int sum) throws Exception;
+	
+	public void storeRON(int clientId, int sum)throws Exception;
 	
 	//retragere
-	public void withdrawal(TheBank bank, Client client, Account account, long sum);
+	public void withdrawalRON(int clientId, int sum) throws Exception;
 	
-	//deounere 
-	public void deposit(TheBank bank, Client client, Account account, long sum);
+	public void withdrawalEuro(int clientId, int sum) throws Exception;
+	
+	public void withdrawalRONFromDeposit(int clientId, int sum) throws Exception;
+	
+	public void withdrawalEuroFromDeposit(int clientId, int sum) throws Exception;
+	
+	//depunere 
+	public void depositEuro(int clientId, int sum);
+	
+	public void depositRON(int clientId, int sum);
 	
 	/**
 	 * 
@@ -46,11 +55,9 @@ public interface BankUseCases {
 	 * The bank monitored
 	 * @param client
 	 * The Client who is monitored
-	 * @param account
-	 * The account monitored by Fist
 	 * Fisc attaches to the bank and receives notifications at every transaction.
 	 */
-	public void attachFiscMonitor(TheBank bank, Client client, Account account);
+	public void attachFiscMonitor(TheBank bank, Client client);
 	
 	public void notifyFisc();
 	
@@ -58,11 +65,14 @@ public interface BankUseCases {
 	 * 
 	 * @param bank
 	 * @param client
-	 * @param account
 	 * 
 	 * Fisc detaches from the Bank's notifications
 	 */
-	public void detachFiscMonitor(TheBank bank, Client client, Account account);
+	public void detachFiscMonitor(TheBank bank, Client client);
+
 	
+
+	
+
 	
 }

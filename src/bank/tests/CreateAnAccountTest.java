@@ -1,40 +1,68 @@
 package bank.tests;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.EntityManager;
 
+import org.hibernate.Session;
 import org.junit.Test;
 
-import utils.DbCleaner;
+import utils.HibernateUtil;
 import utils.JPAUtils;
-import bank.pojo.Account;
 import bank.pojo.Client;
 import bank.pojo.TheBank;
+import bank.usecasesImpl.BankUseCasesImpl;
 
 public class CreateAnAccountTest {
 
+
 	EntityManager em;
+	BankUseCasesImpl bankUseCase;
 	
 	@Test
 	public void initBankAndCreateAnAccount() {
 		em = JPAUtils.getEntityManager();
+		//DbCleaner.deleteTableContentFromDB(em);
 		
-		DbCleaner.deleteTableContentFromDB(em);
+		//em.getTransaction().begin();
 		
-		TheBank bank = new TheBank();
-		bank.setName("ING");
-		em.persist(bank);
+		//creating bank use case
+		bankUseCase = new BankUseCasesImpl(em);
 		
-		Client client = new Client();
-		client.setCNP("19800254631789");
-		client.setBank(bank);
-		Account client1Account = new Account(bank);
+		TheBank ing = null;
+		//creating the bank
+		try{
+			ing = bankUseCase.createBank("ING");
+		}catch(Exception e){
+			System.out.println("Unable to create the bank");
+			e.printStackTrace();
+		}
+			
+		//creating clients
+		Client edison = bankUseCase.createClient("Thomas Edison", "1989567890123", ing.getBankId());
+		Client ionica = bankUseCase.createClient("Ionica", "1934567890123", ing.getBankId());
 		
-		client1Account.setClient(client);
-		em.persist(client);
-		em.persist(client1Account);
 		
+		
+		//creating accounts
+		try {
+			System.out.println(edison.getClientID());
+			edison = bankUseCase.createAccount(edison.getClientID(), ing.getBankId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		try{
+			ionica = bankUseCase.createAccount(ionica.getClientID(), ing.getBankId());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		
 		JPAUtils.close();
 	}
+	
+	
+	
 
 }
