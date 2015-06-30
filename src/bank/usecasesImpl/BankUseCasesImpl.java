@@ -6,14 +6,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
-import org.hibernate.Session;
-
-import utils.HibernateUtil;
+import bank.fisc.FiscEntry;
+import bank.fisc.Subject;
 import bank.pojo.Client;
 import bank.pojo.TheBank;
 import bank.usecases.BankUseCases;
 
-public class BankUseCasesImpl implements BankUseCases{
+public class BankUseCasesImpl extends Subject implements BankUseCases{
 
 	private EntityManager em;
 	
@@ -112,6 +111,8 @@ public class BankUseCasesImpl implements BankUseCases{
 				TheBank bank = em.find(TheBank.class, bankId);
 				bank.removeClient(client);
 				em.remove(client);
+				
+				this.setState(new FiscEntry(clientId, "Account deletion", 0));
 			}
 	}
 
@@ -124,6 +125,8 @@ public class BankUseCasesImpl implements BankUseCases{
 			throw new Exception("Client: "+client.getName()+" cannot have deposit less than 1000 EUR on an account");
 		}else{
 			client.setBalanceEuroDeposit(newSum);
+			
+			this.setState(new FiscEntry(clientId, "Store on Euro deposit account", sum));
 		}
 	}
 
@@ -137,6 +140,8 @@ public class BankUseCasesImpl implements BankUseCases{
 			throw new Exception("Client: "+client.getName()+" cannot have deposit less than 1000 RON on an account");
 		}else{
 			client.setBalanceRONDeposit(newSum);
+			
+			this.setState(new FiscEntry(clientId, "Store on RON deposit account", sum));
 		}
 	}
 
@@ -146,6 +151,8 @@ public class BankUseCasesImpl implements BankUseCases{
 		Client client = em.find(Client.class, clientId);
 		newSum = client.getBalanceEuro() + sum;
 		client.setBalanceEuro(newSum);
+		
+		this.setState(new FiscEntry(clientId, "Store on normal Euro account", sum));
 	}
 
 	@Override
@@ -154,6 +161,8 @@ public class BankUseCasesImpl implements BankUseCases{
 		Client client = em.find(Client.class, clientId);
 		newSum = client.getBalanceRON() + sum;
 		client.setBalanceRON(newSum);
+		
+		this.setState(new FiscEntry(clientId, "Store on normal RON account", sum));
 	}
 	
 	@Override
@@ -165,6 +174,8 @@ public class BankUseCasesImpl implements BankUseCases{
 		}else{
 			newSum = client.getBalanceRON() - sum;
 			client.setBalanceRON(newSum);
+			
+			this.setState(new FiscEntry(clientId, "Withdrawal from normal RON account", sum));
 		}
 	}
 	
@@ -177,6 +188,7 @@ public class BankUseCasesImpl implements BankUseCases{
 			throw new Exception("Client "+client.getName()+" cannot retrieve more money than on the account");
 		}else{
 			client.setBalanceEuro(newSum);
+			this.setState(new FiscEntry(clientId, "Withdrawal from normal Euro account", sum));
 		}
 	}
 
@@ -190,6 +202,7 @@ public class BankUseCasesImpl implements BankUseCases{
 			throw new Exception("Client "+client.getName()+" cannot retrieve more money than on the account");
 		}else{
 			client.setBalanceRONDeposit(newSum);
+			this.setState(new FiscEntry(clientId, "Withdrawal from deposit RON account", sum));
 		}
 	}
 
@@ -198,30 +211,14 @@ public class BankUseCasesImpl implements BankUseCases{
 			throws Exception {
 		int newSum = 0;
 		Client client = em.find(Client.class, clientId);
-		newSum = client.getBalanceRONDeposit() - sum;
+		newSum = client.getBalanceEuroDeposit() - sum;
 		if (newSum < 0){
 			throw new Exception("Client "+client.getName()+" cannot retrieve more money than on the account");
 		}else{
 			client.setBalanceEuroDeposit(newSum);
+			this.setState(new FiscEntry(clientId, "Withdrawal from deposit Euro account", sum));
 		}
 	}
 
 
-	@Override
-	public void attachFiscMonitor(TheBank bank, Client client) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void notifyFisc() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void detachFiscMonitor(TheBank bank, Client client) {
-		// TODO Auto-generated method stub
-		
-	}
 }

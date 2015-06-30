@@ -49,30 +49,4 @@ public interface BankUseCases {
 	
 	public void depositRON(int clientId, int sum);
 	
-	/**
-	 * 
-	 * @param bank 
-	 * The bank monitored
-	 * @param client
-	 * The Client who is monitored
-	 * Fisc attaches to the bank and receives notifications at every transaction.
-	 */
-	public void attachFiscMonitor(TheBank bank, Client client);
-	
-	public void notifyFisc();
-	
-	/**
-	 * 
-	 * @param bank
-	 * @param client
-	 * 
-	 * Fisc detaches from the Bank's notifications
-	 */
-	public void detachFiscMonitor(TheBank bank, Client client);
-
-	
-
-	
-
-	
 }

@@ -1,14 +1,9 @@
 package bank.tests;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.EntityManager;
 
-import org.hibernate.Session;
 import org.junit.Test;
 
-import utils.HibernateUtil;
 import utils.JPAUtils;
 import bank.pojo.Client;
 import bank.pojo.TheBank;

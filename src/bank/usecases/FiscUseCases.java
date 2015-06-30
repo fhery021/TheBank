@@ -1,10 +1,18 @@
 package bank.usecases;
 
-import bank.usecasesImpl.BankUseCasesImpl;
+import java.util.ArrayList;
 
-public abstract class FiscUseCases {
+import bank.fisc.FiscEntry;
 
-	protected BankUseCasesImpl bank;
-	public abstract void update();
+public interface FiscUseCases {
+
+	public void startMonitoring();
+	
+	public void stopMonitoring();
+	
+	public ArrayList<FiscEntry> getAllEntries();
+	
+	public void showAllInfo();
+	
 	
 }
